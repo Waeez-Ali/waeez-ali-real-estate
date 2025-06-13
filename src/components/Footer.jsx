@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (email.trim() !== "") {
+      // Here you would typically send the email to your backend
+      console.log("Subscribing email:", email);
+      setSubscribed(true);
+      setEmail("");
+      // Reset subscription status after 3 seconds
+      setTimeout(() => setSubscribed(false), 3000);
+    }
+  };
+
   return (
     <footer className="relative bg-black text-white py-12 px-6 md:px-16 overflow-hidden">
       {/* Background Fade Effect */}
@@ -16,10 +31,10 @@ export default function Footer() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
-        className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-10"
+        className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10"
       >
         {/* Left Column – Goodbye Message */}
-        <div className="w-full md:w-1/3">
+        <div className="w-full">
           <motion.h2
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -43,10 +58,10 @@ export default function Footer() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.6 }}
-          className="w-full md:w-1/3 flex flex-col items-start gap-2"
+          className="w-full flex flex-col items-start md:items-center gap-2"
         >
-          <h3 className="text-lg font-medium mb-3">Quick Links</h3>
-          <ul className="space-y-2 text-sm text-white/80">
+          <h3 className="text-lg font-medium mb-3 md:text-center">Quick Links</h3>
+          <ul className="space-y-2 text-sm text-white/80 md:text-center">
             <li><a href="#" className="hover:text-yellow-400 transition-colors">Home</a></li>
             <li><a href="#" className="hover:text-yellow-400 transition-colors">Destinations</a></li>
             <li><a href="#" className="hover:text-yellow-400 transition-colors">About</a></li>
@@ -60,25 +75,37 @@ export default function Footer() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.6 }}
-          className="w-full md:w-1/3"
+          className="w-full"
         >
           <h3 className="text-lg font-medium mb-3">Stay Updated</h3>
           <p className="text-sm text-white/70 mb-3">
             Subscribe to our newsletter for offers & updates.
           </p>
-          <form className="flex flex-col sm:flex-row items-center gap-3">
+          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center gap-2">
             <input
               type="email"
               placeholder="Your email"
-              className="w-full sm:w-auto flex-1 px-4 py-2 rounded-full text-black text-sm focus:outline-none"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full flex-grow px-4 py-2 rounded-full text-black text-sm focus:outline-none"
+              required
             />
             <button
               type="submit"
-              className="bg-[#E9BA6C] hover:bg-black-400 transition-colors px-6 py-2 rounded-full text-sm font-medium text-black"
+              className="w-full sm:w-auto sm:flex-shrink-0 bg-[#E9BA6C] hover:bg-[#d9aa5c] transition-colors px-4 py-2 rounded-full text-sm font-medium text-black min-w-[90px]"
             >
-              Subscribe
+              {subscribed ? "Sent!" : "Subscribe"}
             </button>
           </form>
+          {subscribed && (
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-green-400 text-xs mt-2"
+            >
+              Thank you for subscribing!
+            </motion.p>
+          )}
         </motion.div>
       </motion.div>
 
